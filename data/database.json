@@ -144,6 +144,22 @@
       "createdAt": "2025-11-24T14:20:57.394Z",
       "endTime": "2025-11-24T14:21:00.132Z",
       "duration": 0
+    },
+    {
+      "userId": "8e73a5df-070b-4f15-9605-0ec4bf61b69e",
+      "startTime": "2025-11-24T14:25:25.670Z",
+      "id": "2c1e6544-b8f8-4486-9c20-7eb3455d0453",
+      "createdAt": "2025-11-24T14:25:25.671Z",
+      "endTime": "2025-11-24T14:25:29.821Z",
+      "duration": 0
+    },
+    {
+      "userId": "8e73a5df-070b-4f15-9605-0ec4bf61b69e",
+      "startTime": "2025-11-24T14:26:51.826Z",
+      "id": "8daa4abc-df83-4561-9ad7-3b74040e9b10",
+      "createdAt": "2025-11-24T14:26:51.827Z",
+      "endTime": "2025-11-24T14:28:06.105Z",
+      "duration": 1
     }
   ],
   "disciplinaryRecords": [],
@@ -207,6 +223,40 @@
       "action": "user_login",
       "timestamp": "2025-11-24T14:23:41.335Z",
       "id": "71d5e47d-111d-4752-9efd-4bde7a15cc99"
+    },
+    {
+      "performedBy": "8e73a5df-070b-4f15-9605-0ec4bf61b69e",
+      "action": "duty_started",
+      "targetResourceType": "duty_log",
+      "targetResourceId": "2c1e6544-b8f8-4486-9c20-7eb3455d0453",
+      "timestamp": "2025-11-24T14:25:25.672Z",
+      "id": "e26f11a6-abda-4aac-8246-6ebec0ea0661"
+    },
+    {
+      "performedBy": "8e73a5df-070b-4f15-9605-0ec4bf61b69e",
+      "action": "duty_ended",
+      "targetResourceType": "duty_log",
+      "targetResourceId": "2c1e6544-b8f8-4486-9c20-7eb3455d0453",
+      "newValue": "0 minutes",
+      "timestamp": "2025-11-24T14:25:29.822Z",
+      "id": "369f55d1-5a5c-4984-b488-93d35156665d"
+    },
+    {
+      "performedBy": "8e73a5df-070b-4f15-9605-0ec4bf61b69e",
+      "action": "duty_started",
+      "targetResourceType": "duty_log",
+      "targetResourceId": "8daa4abc-df83-4561-9ad7-3b74040e9b10",
+      "timestamp": "2025-11-24T14:26:51.828Z",
+      "id": "eee0e9df-31a8-4ddd-a908-96fa540e363c"
+    },
+    {
+      "performedBy": "8e73a5df-070b-4f15-9605-0ec4bf61b69e",
+      "action": "duty_ended",
+      "targetResourceType": "duty_log",
+      "targetResourceId": "8daa4abc-df83-4561-9ad7-3b74040e9b10",
+      "newValue": "1 minutes",
+      "timestamp": "2025-11-24T14:28:06.106Z",
+      "id": "5707bd0d-5b19-429f-8164-24d374e9aa71"
     }
   ]
 }
