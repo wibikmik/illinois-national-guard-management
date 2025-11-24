@@ -13,10 +13,16 @@ export async function seedDatabase() {
 
   console.log("Seeding database...");
 
-  // Create admin user
+  // Import bcrypt for password hashing
+  const bcrypt = require("bcryptjs");
+  const saltRounds = 12;
+
+  // Create admin user (password: admin123)
   const admin: InsertUser = {
     discordId: "123456789",
     discordUsername: "admin_user",
+    username: "admin",
+    hashedPassword: await bcrypt.hash("admin123", saltRounds),
     firstName: "John",
     lastName: "Smith",
     rank: "GEN",
@@ -26,10 +32,12 @@ export async function seedDatabase() {
     joinDate: new Date().toISOString()
   };
 
-  // Create general
+  // Create general (password: general123)
   const general: InsertUser = {
     discordId: "987654321",
     discordUsername: "gen_jackson",
+    username: "gen_jackson",
+    hashedPassword: await bcrypt.hash("general123", saltRounds),
     firstName: "Robert",
     lastName: "Jackson",
     rank: "COL",
@@ -40,10 +48,12 @@ export async function seedDatabase() {
     joinDate: new Date(Date.now() - 365 * 24 * 60 * 60 * 1000).toISOString()
   };
 
-  // Create colonel
+  // Create colonel (password: colonel123)
   const colonel: InsertUser = {
     discordId: "555666777",
     discordUsername: "col_davis",
+    username: "col_davis",
+    hashedPassword: await bcrypt.hash("colonel123", saltRounds),
     firstName: "Michael",
     lastName: "Davis",
     rank: "MAJ",

@@ -11,7 +11,8 @@ import { Shield } from "lucide-react";
 export default function Login() {
   const [, setLocation] = useLocation();
   const { toast } = useToast();
-  const [discordId, setDiscordId] = useState("");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -22,11 +23,12 @@ export default function Login() {
       const response = await fetch("/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ discordId })
+        body: JSON.stringify({ username, password })
       });
 
       if (!response.ok) {
-        throw new Error("Login failed");
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Login failed");
       }
 
       const user = await response.json();
@@ -38,10 +40,10 @@ export default function Login() {
       });
       
       setLocation("/");
-    } catch (error) {
+    } catch (error: any) {
       toast({
         title: "Login failed",
-        description: "Please check your Discord ID and try again.",
+        description: error.message || "Please check your credentials and try again.",
         variant: "destructive"
       });
     } finally {
@@ -60,21 +62,35 @@ export default function Login() {
             Illinois National Guard
           </CardTitle>
           <CardDescription>
-            RP Management System - Please log in with your Discord ID
+            RP Management System - Secure Login
           </CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleLogin} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="discordId">Discord ID</Label>
+              <Label htmlFor="username">Username</Label>
               <Input
-                id="discordId"
+                id="username"
                 type="text"
-                placeholder="Enter your Discord ID"
-                value={discordId}
-                onChange={(e) => setDiscordId(e.target.value)}
+                placeholder="Enter your username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
                 required
-                data-testid="input-discord-id"
+                autoComplete="username"
+                data-testid="input-username"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="password">Password</Label>
+              <Input
+                id="password"
+                type="password"
+                placeholder="Enter your password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                autoComplete="current-password"
+                data-testid="input-password"
               />
             </div>
             <Button 
@@ -87,7 +103,7 @@ export default function Login() {
             </Button>
           </form>
           <p className="text-xs text-muted-foreground text-center mt-4">
-            Only authorized personnel with registered Discord IDs can access the system.
+            Only authorized personnel with registered credentials can access the system.
           </p>
         </CardContent>
       </Card>

@@ -15,6 +15,7 @@ import {
   type User
 } from "@shared/schema";
 import { fromZodError } from "zod-validation-error";
+import bcrypt from "bcryptjs";
 
 // ============================================================================
 // MIDDLEWARE
@@ -101,16 +102,30 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.post("/api/auth/login", async (req: Request, res: Response) => {
     try {
-      const { discordId } = req.body;
+      const { username, password } = req.body;
       
-      if (!discordId) {
-        return res.status(400).json({ error: "Discord ID required" });
+      if (!username || !password) {
+        return res.status(400).json({ error: "Username and password required" });
       }
 
-      const user = await storage.getUserByDiscordId(discordId);
+      // Find user by username
+      const allUsers = await storage.getAllUsers();
+      const user = allUsers.find(u => u.username === username);
       
       if (!user) {
-        return res.status(404).json({ error: "User not found" });
+        return res.status(401).json({ error: "Invalid credentials" });
+      }
+
+      // Verify password
+      if (!user.hashedPassword) {
+        return res.status(401).json({ error: "Password not set for this user" });
+      }
+
+      const isValidPassword = await bcrypt.compare(password, user.hashedPassword);
+      
+      if (!isValidPassword) {
+        await createAudit(user.id, "failed_login_attempt");
+        return res.status(401).json({ error: "Invalid credentials" });
       }
 
       // Update last activity
@@ -120,7 +135,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       await createAudit(user.id, "user_login");
 
-      return res.json(user);
+      // Don't send password hash to client
+      const { hashedPassword, ...userWithoutPassword } = user;
+      return res.json(userWithoutPassword);
     } catch (error: any) {
       return res.status(500).json({ error: error.message });
     }
@@ -141,7 +158,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.post("/api/users", requireAuth, requirePermission("manage_users"), async (req: Request, res: Response) => {
     try {
-      const result = insertUserSchema.safeParse(req.body);
+      const { password, ...userData } = req.body;
+      
+      // Hash password if provided
+      let hashedPassword: string | undefined;
+      if (password) {
+        const saltRounds = 12;
+        hashedPassword = await bcrypt.hash(password, saltRounds);
+      }
+
+      const result = insertUserSchema.safeParse({
+        ...userData,
+        hashedPassword
+      });
       
       if (!result.success) {
         const error = fromZodError(result.error);
@@ -157,7 +186,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
         user.id
       );
 
-      return res.json(user);
+      // Don't send password hash to client
+      const { hashedPassword: _, ...userWithoutPassword } = user;
+      return res.json(userWithoutPassword);
     } catch (error: any) {
       return res.status(500).json({ error: error.message });
     }

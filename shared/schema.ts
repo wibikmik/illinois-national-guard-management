@@ -81,7 +81,6 @@ export const ROLE_PERMISSIONS = {
     "update_disciplinary",
     "revoke_disciplinary",
     "view_unit_reports",
-    "view_all_reports",
     "duty_on_off"
   ],
   General: [
@@ -119,6 +118,8 @@ export const userSchema = z.object({
   id: z.string(),
   discordId: z.string(),
   discordUsername: z.string(),
+  username: z.string().min(3).max(50).optional(),
+  hashedPassword: z.string().optional(),
   robloxUserId: z.string().optional(),
   robloxUsername: z.string().optional(),
   firstName: z.string(),
