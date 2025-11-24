@@ -306,3 +306,55 @@ export const insertAuditLogSchema = auditLogSchema.omit({ id: true });
 
 export type AuditLog = z.infer<typeof auditLogSchema>;
 export type InsertAuditLog = z.infer<typeof insertAuditLogSchema>;
+
+// ============================================================================
+// AWARD SCHEMA (US Army Decorations & Medals)
+// ============================================================================
+
+export const AWARD_CATEGORIES = [
+  "valor",
+  "achievement", 
+  "service",
+  "campaign",
+  "unit",
+  "skill_badge",
+  "foreign"
+] as const;
+
+export type AwardCategory = typeof AWARD_CATEGORIES[number];
+
+// Award catalog - defines available awards
+export const awardSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  abbreviation: z.string().optional(),
+  category: z.enum(AWARD_CATEGORIES),
+  description: z.string().optional(),
+  precedence: z.number(), // Order of precedence (lower = higher priority)
+  imageUrl: z.string().optional(),
+  createdAt: z.string()
+});
+
+export const insertAwardSchema = awardSchema.omit({ id: true, createdAt: true });
+
+export type Award = z.infer<typeof awardSchema>;
+export type InsertAward = z.infer<typeof insertAwardSchema>;
+
+// User awards - join table linking users to their earned awards
+export const userAwardSchema = z.object({
+  id: z.string(),
+  userId: z.string(),
+  awardId: z.string(),
+  dateAwarded: z.string(),
+  awardedBy: z.string(), // User ID of person who awarded it
+  oakLeafClusters: z.number().default(0), // Number of subsequent awards
+  vDevice: z.boolean().default(false), // Valor device
+  cDevice: z.boolean().default(false), // Combat device
+  citation: z.string().optional(),
+  createdAt: z.string()
+});
+
+export const insertUserAwardSchema = userAwardSchema.omit({ id: true, createdAt: true });
+
+export type UserAward = z.infer<typeof userAwardSchema>;
+export type InsertUserAward = z.infer<typeof insertUserAwardSchema>;

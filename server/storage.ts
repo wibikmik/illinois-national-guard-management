@@ -17,7 +17,11 @@ import type {
   Unit,
   InsertUnit,
   AuditLog,
-  InsertAuditLog
+  InsertAuditLog,
+  Award,
+  InsertAward,
+  UserAward,
+  InsertUserAward
 } from "@shared/schema";
 
 // ============================================================================
@@ -74,6 +78,18 @@ export interface IStorage {
   getAuditLog(id: string): Promise<AuditLog | undefined>;
   getAllAuditLogs(): Promise<AuditLog[]>;
   createAuditLog(log: InsertAuditLog): Promise<AuditLog>;
+  
+  // Awards (catalog)
+  getAward(id: string): Promise<Award | undefined>;
+  getAllAwards(): Promise<Award[]>;
+  createAward(award: InsertAward): Promise<Award>;
+  
+  // User Awards
+  getUserAward(id: string): Promise<UserAward | undefined>;
+  getUserAwardsByUser(userId: string): Promise<UserAward[]>;
+  getAllUserAwards(): Promise<UserAward[]>;
+  createUserAward(userAward: InsertUserAward): Promise<UserAward>;
+  revokeUserAward(id: string): Promise<void>;
 }
 
 // ============================================================================
@@ -91,6 +107,8 @@ interface Database {
   missions: Mission[];
   units: Unit[];
   auditLogs: AuditLog[];
+  awards: Award[];
+  userAwards: UserAward[];
 }
 
 export class JsonStorage implements IStorage {
@@ -107,7 +125,9 @@ export class JsonStorage implements IStorage {
       meritPointTransactions: [],
       missions: [],
       units: [],
-      auditLogs: []
+      auditLogs: [],
+      awards: [],
+      userAwards: []
     };
   }
 
@@ -368,6 +388,57 @@ export class JsonStorage implements IStorage {
     this.db.auditLogs.push(log);
     await this.save();
     return log;
+  }
+
+  // Awards
+  async getAward(id: string): Promise<Award | undefined> {
+    return this.db.awards.find(a => a.id === id);
+  }
+
+  async getAllAwards(): Promise<Award[]> {
+    return this.db.awards.sort((a, b) => a.precedence - b.precedence);
+  }
+
+  async createAward(insertAward: InsertAward): Promise<Award> {
+    const award: Award = {
+      ...insertAward,
+      id: randomUUID(),
+      createdAt: new Date().toISOString()
+    };
+    this.db.awards.push(award);
+    await this.save();
+    return award;
+  }
+
+  // User Awards
+  async getUserAward(id: string): Promise<UserAward | undefined> {
+    return this.db.userAwards.find(ua => ua.id === id);
+  }
+
+  async getUserAwardsByUser(userId: string): Promise<UserAward[]> {
+    return this.db.userAwards.filter(ua => ua.userId === userId);
+  }
+
+  async getAllUserAwards(): Promise<UserAward[]> {
+    return this.db.userAwards;
+  }
+
+  async createUserAward(insertUserAward: InsertUserAward): Promise<UserAward> {
+    const userAward: UserAward = {
+      ...insertUserAward,
+      id: randomUUID(),
+      createdAt: new Date().toISOString()
+    };
+    this.db.userAwards.push(userAward);
+    await this.save();
+    return userAward;
+  }
+
+  async revokeUserAward(id: string): Promise<void> {
+    const index = this.db.userAwards.findIndex(ua => ua.id === id);
+    if (index === -1) throw new Error("User award not found");
+    this.db.userAwards.splice(index, 1);
+    await this.save();
   }
 }
 
