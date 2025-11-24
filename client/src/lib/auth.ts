@@ -1,4 +1,4 @@
-import { User } from "@shared/schema";
+import { User, ROLE_PERMISSIONS } from "@shared/schema";
 
 const AUTH_STORAGE_KEY = "ing_auth_user";
 
@@ -22,7 +22,6 @@ export function clearAuthUser() {
 
 export function hasPermission(user: User | null, permission: string): boolean {
   if (!user) return false;
-  const { ROLE_PERMISSIONS } = require("@shared/schema");
   const permissions = ROLE_PERMISSIONS[user.role] || [];
   return permissions.includes(permission);
 }
