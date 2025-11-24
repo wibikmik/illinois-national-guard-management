@@ -20,6 +20,26 @@ export function clearAuthUser() {
   localStorage.removeItem(AUTH_STORAGE_KEY);
 }
 
+export async function logout() {
+  const user = getAuthUser();
+  
+  if (user) {
+    try {
+      await fetch("/api/auth/logout", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-User-Id": user.id
+        }
+      });
+    } catch (error) {
+      console.error("Logout request failed:", error);
+    }
+  }
+  
+  clearAuthUser();
+}
+
 export function hasPermission(user: User | null, permission: string): boolean {
   if (!user) return false;
   const permissions = ROLE_PERMISSIONS[user.role] || [];
