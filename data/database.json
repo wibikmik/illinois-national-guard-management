@@ -1,23 +1,28 @@
 {
   "users": [
     {
-      "discordId": "123456789",
-      "discordUsername": "admin_user",
-      "firstName": "John",
-      "lastName": "Smith",
+      "discordId": "000000000000000001",
+      "discordUsername": "admin",
+      "username": "admin",
+      "hashedPassword": "$2b$12$mIuG6V0.vd.5c.setw3SVu29MC4By8BS7ymX2WDSPgQFhS/SIl.Ua",
+      "firstName": "System",
+      "lastName": "Administrator",
       "rank": "GEN",
       "role": "Admin",
-      "unit": "Command",
+      "unit": "HQ",
       "status": "active",
-      "id": "3c444c10-3801-44c3-81b0-fcb54851e55a",
+      "joinDate": "2025-11-24T14:35:54.325Z",
+      "id": "f2bcbd2e-ed83-4d0d-b368-b9b2af3781e0",
       "meritPoints": 0,
-      "createdAt": "2025-11-24T13:13:10.447Z",
-      "updatedAt": "2025-11-24T14:20:51.101Z",
-      "lastActivity": "2025-11-24T14:20:51.101Z"
+      "createdAt": "2025-11-24T14:35:54.326Z",
+      "updatedAt": "2025-11-24T14:36:24.136Z",
+      "lastActivity": "2025-11-24T14:36:24.136Z"
     },
     {
       "discordId": "987654321",
       "discordUsername": "gen_jackson",
+      "username": "gen_jackson",
+      "hashedPassword": "$2b$12$n3x7h7ix70nphS8bErFQZubt9IroJ5CFUxyjntAWGYVN8dIs7KEBC",
       "firstName": "Robert",
       "lastName": "Jackson",
       "rank": "COL",
@@ -25,15 +30,17 @@
       "unit": "1st Division",
       "status": "active",
       "callsign": "Havoc-1",
-      "id": "8e73a5df-070b-4f15-9605-0ec4bf61b69e",
+      "joinDate": "2024-11-24T14:35:54.717Z",
+      "id": "a21be4fb-918a-4389-8119-0f34816526d0",
       "meritPoints": 0,
-      "createdAt": "2025-11-24T13:13:10.448Z",
-      "updatedAt": "2025-11-24T14:23:41.331Z",
-      "lastActivity": "2025-11-24T14:23:41.331Z"
+      "createdAt": "2025-11-24T14:35:55.075Z",
+      "updatedAt": "2025-11-24T14:35:55.075Z"
     },
     {
       "discordId": "555666777",
       "discordUsername": "col_davis",
+      "username": "col_davis",
+      "hashedPassword": "$2b$12$dPSskvevBYpEgWl3sllVCu7bHpYURK1NSCaWHyEee6F3Cqgn3Q7dG",
       "firstName": "Michael",
       "lastName": "Davis",
       "rank": "MAJ",
@@ -41,10 +48,11 @@
       "unit": "2nd Battalion",
       "status": "active",
       "callsign": "Eagle-6",
-      "id": "33438448-0e4a-4d84-b955-266a75da34dc",
+      "joinDate": "2025-05-28T14:35:55.075Z",
+      "id": "ba45730a-58ca-437b-8f8a-087462d7060a",
       "meritPoints": 0,
-      "createdAt": "2025-11-24T13:13:10.449Z",
-      "updatedAt": "2025-11-24T13:13:10.449Z"
+      "createdAt": "2025-11-24T14:35:55.076Z",
+      "updatedAt": "2025-11-24T14:35:55.076Z"
     },
     {
       "discordId": "111222333",
@@ -56,10 +64,11 @@
       "unit": "Military Police",
       "status": "active",
       "callsign": "Charlie-5",
-      "id": "3b5f9b6a-29e3-4e44-85ac-2a233f73e51a",
+      "joinDate": "2025-08-26T14:35:55.075Z",
+      "id": "818f1e06-8db2-4a99-9b49-aa638e7dc8a5",
       "meritPoints": 0,
-      "createdAt": "2025-11-24T13:13:10.449Z",
-      "updatedAt": "2025-11-24T13:13:10.449Z"
+      "createdAt": "2025-11-24T14:35:55.077Z",
+      "updatedAt": "2025-11-24T14:35:55.077Z"
     },
     {
       "discordId": "444555666",
@@ -71,10 +80,11 @@
       "unit": "Alpha Company",
       "status": "active",
       "callsign": "Alpha-1",
-      "id": "98770b45-7d6f-473a-9e0e-199afc76ede1",
+      "joinDate": "2025-09-25T14:35:55.075Z",
+      "id": "b95730e9-720a-4fd3-a381-82184fd7f732",
       "meritPoints": 0,
-      "createdAt": "2025-11-24T13:13:10.449Z",
-      "updatedAt": "2025-11-24T13:13:10.449Z"
+      "createdAt": "2025-11-24T14:35:55.078Z",
+      "updatedAt": "2025-11-24T14:35:55.078Z"
     },
     {
       "discordId": "777888999",
@@ -86,10 +96,11 @@
       "unit": "Bravo Company",
       "status": "active",
       "callsign": "Bravo-2",
-      "id": "4d4310e6-c64b-4bba-9120-edad217594d0",
+      "joinDate": "2025-10-10T14:35:55.075Z",
+      "id": "f5e832e6-53ce-48e5-8da2-b0df839bdf1a",
       "meritPoints": 0,
-      "createdAt": "2025-11-24T13:13:10.450Z",
-      "updatedAt": "2025-11-24T13:13:10.450Z"
+      "createdAt": "2025-11-24T14:35:55.083Z",
+      "updatedAt": "2025-11-24T14:35:55.083Z"
     },
     {
       "discordId": "222333444",
@@ -101,10 +112,11 @@
       "unit": "Charlie Company",
       "status": "active",
       "callsign": "Charlie-3",
-      "id": "23b49c10-022a-4755-9761-f28076a0f45c",
+      "joinDate": "2025-10-25T14:35:55.075Z",
+      "id": "8578a647-0822-43f6-87e8-e78c730b9040",
       "meritPoints": 0,
-      "createdAt": "2025-11-24T13:13:10.450Z",
-      "updatedAt": "2025-11-24T13:13:10.450Z"
+      "createdAt": "2025-11-24T14:35:55.083Z",
+      "updatedAt": "2025-11-24T14:35:55.083Z"
     },
     {
       "discordId": "333444555",
@@ -116,10 +128,11 @@
       "unit": "Delta Company",
       "status": "active",
       "callsign": "Delta-4",
-      "id": "98fa42ef-126f-4db7-b145-71e45089990d",
+      "joinDate": "2025-11-04T14:35:55.075Z",
+      "id": "ea1b8947-8171-49d4-9fcf-03b8c4755795",
       "meritPoints": 0,
-      "createdAt": "2025-11-24T13:13:10.451Z",
-      "updatedAt": "2025-11-24T13:13:10.451Z"
+      "createdAt": "2025-11-24T14:35:55.084Z",
+      "updatedAt": "2025-11-24T14:35:55.084Z"
     },
     {
       "discordId": "666777888",
@@ -130,38 +143,14 @@
       "role": "Soldier",
       "unit": "Echo Company",
       "status": "active",
-      "id": "5fbbeded-e461-40f3-84ff-b52095440315",
+      "joinDate": "2025-11-14T14:35:55.075Z",
+      "id": "3ca8394e-1cd1-4484-9fd7-9b975dc44f25",
       "meritPoints": 0,
-      "createdAt": "2025-11-24T13:13:10.452Z",
-      "updatedAt": "2025-11-24T13:13:10.452Z"
+      "createdAt": "2025-11-24T14:35:55.089Z",
+      "updatedAt": "2025-11-24T14:35:55.089Z"
     }
   ],
-  "dutyLogs": [
-    {
-      "userId": "3c444c10-3801-44c3-81b0-fcb54851e55a",
-      "startTime": "2025-11-24T14:20:57.394Z",
-      "id": "71303ce2-263c-4b45-895b-8c55a88714ef",
-      "createdAt": "2025-11-24T14:20:57.394Z",
-      "endTime": "2025-11-24T14:21:00.132Z",
-      "duration": 0
-    },
-    {
-      "userId": "8e73a5df-070b-4f15-9605-0ec4bf61b69e",
-      "startTime": "2025-11-24T14:25:25.670Z",
-      "id": "2c1e6544-b8f8-4486-9c20-7eb3455d0453",
-      "createdAt": "2025-11-24T14:25:25.671Z",
-      "endTime": "2025-11-24T14:25:29.821Z",
-      "duration": 0
-    },
-    {
-      "userId": "8e73a5df-070b-4f15-9605-0ec4bf61b69e",
-      "startTime": "2025-11-24T14:26:51.826Z",
-      "id": "8daa4abc-df83-4561-9ad7-3b74040e9b10",
-      "createdAt": "2025-11-24T14:26:51.827Z",
-      "endTime": "2025-11-24T14:28:06.105Z",
-      "duration": 1
-    }
-  ],
+  "dutyLogs": [],
   "disciplinaryRecords": [],
   "promotions": [],
   "meritPointTransactions": [],
@@ -169,94 +158,27 @@
   "units": [
     {
       "name": "1st Division",
+      "abbreviation": "1ST DIV",
       "description": "Primary combat division",
-      "commanderId": "8e73a5df-070b-4f15-9605-0ec4bf61b69e",
-      "id": "e0621643-8c1c-4f2c-82df-0adc77b28ddf",
-      "createdAt": "2025-11-24T13:13:10.457Z"
+      "commanderId": "a21be4fb-918a-4389-8119-0f34816526d0",
+      "id": "853fa942-6105-4db4-9196-174df000b828",
+      "createdAt": "2025-11-24T14:35:55.090Z"
     },
     {
       "name": "2nd Battalion",
+      "abbreviation": "2ND BN",
       "description": "Infantry battalion",
-      "commanderId": "33438448-0e4a-4d84-b955-266a75da34dc",
-      "id": "41af625c-4ee7-43c6-b678-eea1c9a228b6",
-      "createdAt": "2025-11-24T13:13:10.457Z"
+      "commanderId": "ba45730a-58ca-437b-8f8a-087462d7060a",
+      "id": "0792c84c-9863-40e2-9052-6b1636867fb4",
+      "createdAt": "2025-11-24T14:35:55.090Z"
     }
   ],
   "auditLogs": [
     {
-      "performedBy": "3c444c10-3801-44c3-81b0-fcb54851e55a",
+      "performedBy": "f2bcbd2e-ed83-4d0d-b368-b9b2af3781e0",
       "action": "user_login",
-      "timestamp": "2025-11-24T13:13:24.966Z",
-      "id": "2c4c0d61-ab0d-4020-bf6d-ebaaeb4bdd01"
-    },
-    {
-      "performedBy": "3c444c10-3801-44c3-81b0-fcb54851e55a",
-      "action": "user_login",
-      "timestamp": "2025-11-24T14:20:51.103Z",
-      "id": "ac0d724c-7aa7-4df0-b83b-420be36f9c27"
-    },
-    {
-      "performedBy": "3c444c10-3801-44c3-81b0-fcb54851e55a",
-      "action": "duty_started",
-      "targetResourceType": "duty_log",
-      "targetResourceId": "71303ce2-263c-4b45-895b-8c55a88714ef",
-      "timestamp": "2025-11-24T14:20:57.395Z",
-      "id": "e1682e43-317f-4a85-870c-e3dd010332ff"
-    },
-    {
-      "performedBy": "3c444c10-3801-44c3-81b0-fcb54851e55a",
-      "action": "duty_ended",
-      "targetResourceType": "duty_log",
-      "targetResourceId": "71303ce2-263c-4b45-895b-8c55a88714ef",
-      "newValue": "0 minutes",
-      "timestamp": "2025-11-24T14:21:00.132Z",
-      "id": "cafa65da-48d2-4b85-a2c1-bb675a0ceca6"
-    },
-    {
-      "performedBy": "8e73a5df-070b-4f15-9605-0ec4bf61b69e",
-      "action": "user_login",
-      "timestamp": "2025-11-24T14:21:58.631Z",
-      "id": "5cb96d46-8005-470a-9b3b-b42c7c31c2c8"
-    },
-    {
-      "performedBy": "8e73a5df-070b-4f15-9605-0ec4bf61b69e",
-      "action": "user_login",
-      "timestamp": "2025-11-24T14:23:41.335Z",
-      "id": "71d5e47d-111d-4752-9efd-4bde7a15cc99"
-    },
-    {
-      "performedBy": "8e73a5df-070b-4f15-9605-0ec4bf61b69e",
-      "action": "duty_started",
-      "targetResourceType": "duty_log",
-      "targetResourceId": "2c1e6544-b8f8-4486-9c20-7eb3455d0453",
-      "timestamp": "2025-11-24T14:25:25.672Z",
-      "id": "e26f11a6-abda-4aac-8246-6ebec0ea0661"
-    },
-    {
-      "performedBy": "8e73a5df-070b-4f15-9605-0ec4bf61b69e",
-      "action": "duty_ended",
-      "targetResourceType": "duty_log",
-      "targetResourceId": "2c1e6544-b8f8-4486-9c20-7eb3455d0453",
-      "newValue": "0 minutes",
-      "timestamp": "2025-11-24T14:25:29.822Z",
-      "id": "369f55d1-5a5c-4984-b488-93d35156665d"
-    },
-    {
-      "performedBy": "8e73a5df-070b-4f15-9605-0ec4bf61b69e",
-      "action": "duty_started",
-      "targetResourceType": "duty_log",
-      "targetResourceId": "8daa4abc-df83-4561-9ad7-3b74040e9b10",
-      "timestamp": "2025-11-24T14:26:51.828Z",
-      "id": "eee0e9df-31a8-4ddd-a908-96fa540e363c"
-    },
-    {
-      "performedBy": "8e73a5df-070b-4f15-9605-0ec4bf61b69e",
-      "action": "duty_ended",
-      "targetResourceType": "duty_log",
-      "targetResourceId": "8daa4abc-df83-4561-9ad7-3b74040e9b10",
-      "newValue": "1 minutes",
-      "timestamp": "2025-11-24T14:28:06.106Z",
-      "id": "5707bd0d-5b19-429f-8164-24d374e9aa71"
+      "timestamp": "2025-11-24T14:36:24.137Z",
+      "id": "1b3ac39c-376c-45bc-a637-88a62e4a51a5"
     }
   ]
 }
