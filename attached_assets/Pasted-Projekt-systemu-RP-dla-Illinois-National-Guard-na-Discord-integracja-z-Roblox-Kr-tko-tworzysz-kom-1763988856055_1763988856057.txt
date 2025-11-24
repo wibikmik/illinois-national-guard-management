@@ -1,0 +1,104 @@
+Projekt systemu RP dla Illinois National Guard na Discord (integracja z Roblox)
+Krótko: tworzysz kompletny system roleplay z botem Discord, bazą JSON, rolami i uprawnieniami zależnymi od stopnia, z panelami dla Admina, przepływami dla MP i Generałów oraz pełnym logowaniem aktywności.
+
+Założenia i cele
+Platformy: Discord (bot + role + kanały) oraz identyfikatory Roblox powiązane z kontami.
+
+Baza danych: Plik JSON jako główna „płaska” baza, z logicznym podziałem na moduły.
+
+Rejestracja: Tylko Admin może tworzyć konta. Brak samodzielnej rejestracji.
+
+Uprawnienia: Zależne od roli systemowej i stopnia wojskowego (kolonel ma też uprawnienia MP; generałowie mają pełny dostęp).
+
+Funkcjonalności: Duty system, dyscyplinarki (MP), awanse (generałowie), punkty zasług, raporty misji, jednostki/oddziały, panel admina.
+
+Audyt: Pełne logowanie działań (kto, kiedy, co), wersjonowanie wpisów krytycznych.
+
+Architektura i moduły
+Moduł identyfikacji i profili
+Identyfikacja:
+
+ID systemowe: unikalny user_id.
+
+Discord: discord_id, discord_username.
+
+Roblox: roblox_user_id, roblox_username.
+
+Profil:
+
+Dane personalne: imię RP, nazwisko RP, callsign (opcjonalnie).
+
+Stopień i funkcja: aktualny stopień, historia stopni, funkcja (MOS/stanowisko), oddział/jednostka.
+
+Status służby: aktywny/nieaktywny, data wstąpienia, ostatnia aktywność.
+
+Punkty zasług: bieżące saldo + historia zmian z przyczyną.
+
+Moduł duty (wejścia/wyjścia na służbę)
+Komendy: /duty on, /duty off, /duty status, /duty report.
+
+Logowanie: start/end w ISO, automatyczne wyliczanie czasu i tygodniowych/miesięcznych sum.
+
+Raporty: dostęp wg roli; żołnierz widzi swoje, dowódcy i generałowie widzą swoich/całość.
+
+Moduł dyscyplinarek (MP)
+Komendy: /discipline create, /discipline list, /discipline update, /discipline revoke.
+
+Widoczność: MP widzi wszystkie kary; żołnierz tylko swoje; kolonel ma uprawnienia MP; generał pełne.
+
+Atrybuty: powód, kategoria, data, wystawiający, status (active, appealed, closed), notatki, dowody (linki).
+
+Moduł awansów (generałowie)
+Komendy: /promote, /demote (jeśli przewidziane), /promotion-history.
+
+Reguły: sprawdzanie wymogów (punkty zasług, czas służby, brak aktywnych ciężkich kar, rekomendacje).
+
+Ogłoszenia: automatyczne posty na kanale „awansy”; aktualizacja roli Discord i stopnia w profilu.
+
+Stopnie: pełna drabina Enlisted, Warrant, Officer z aliasami i kodami (PV1, PFC, CPT, itd.).
+
+Moduł panelu admina
+Widok: rozszerzony panel zarządzania użytkownikami, rolami i modułami.
+
+Funkcje adminowskie:
+
+Tworzenie kont: przypisanie Discord/Roblox, stopień, oddział.
+
+Edycja danych: profilu, ról, statusu.
+
+Reset dostępu: odświeżenie tokenów, wymuszenie reautoryzacji.
+
+Zarządzanie strukturą: oddziały, kanały, mapowanie ról Discord ↔ uprawnienia systemowe.
+
+Eksport/Import JSON: snapshoty, kopie zapasowe, migracje wersji.
+
+Moduł raportów misji i harmonogramów
+Raporty misji: uczestnicy, czas, wynik, punkty zasług, dowódca, notatki.
+
+Harmonogram: wydarzenia RP, przypomnienia na Discord, lista obecności.
+
+Audyt i logowanie
+Logi audytu: każda akcja krytyczna (dyscyplinarka, awans, edycja profilu, duty) ma wpis audytu z who, when, what, prev_value, new_value.
+
+Wersjonowanie: kluczowe rekordy (discipline, promotions) otrzymują version i historię zmian.
+
+Uprawnienia i dostęp
+Role systemowe
+Soldier: widzi tylko swoje dane, duty, punkty, własne dyscyplinarki i historię awansów.
+
+MP: tworzy i edytuje dyscyplinarki; widzi wszystkie kary; nie ma awansów.
+
+Colonel (COL): pełne uprawnienia MP + dowódcze raporty; bez awansów, chyba że także General.
+
+General (BG/MG/LTG/GEN/GA): pełen dostęp (awanse, demoty, raporty, dyscyplinarki, duty, punkty).
+
+Admin: zarządza użytkownikami, strukturą i konfiguracją; nie musi mieć uprawnień RP (awansów), ale może je posiadać jeśli ma też stopień General.
+
+Mapa uprawnień (skrót)
+Soldier: view_own_profile, view_own_duty, view_own_disciplinary, view_own_promotions.
+
+MP/COL: view_all_disciplinary, create_disciplinary, update_disciplinary, revoke_disciplinary, view_unit_reports.
+
+General: promote, demote, view_all_reports, manage_merit_points, override_disciplinary.
+
+Admin: manage_users, manage_roles_map, manage_units, export_import_json, configure_bot, configure_channels.
