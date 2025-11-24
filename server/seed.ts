@@ -1,5 +1,6 @@
 import { storage } from "./storage";
 import type { InsertUser } from "@shared/schema";
+import bcrypt from "bcryptjs";
 
 export async function seedDatabase() {
   await storage.init();
@@ -14,23 +15,25 @@ export async function seedDatabase() {
   console.log("Seeding database...");
 
   // Import bcrypt for password hashing
-  const bcrypt = require("bcryptjs");
   const saltRounds = 12;
 
-  // Create admin user (password: admin123)
-  const admin: InsertUser = {
-    discordId: "123456789",
-    discordUsername: "admin_user",
+  // Create default admin user with known credentials
+  const adminPassword = await bcrypt.hash("admin123", saltRounds);
+
+  // Create admin user
+  const admin = await storage.createUser({
+    discordId: "000000000000000001",
+    discordUsername: "admin",
     username: "admin",
-    hashedPassword: await bcrypt.hash("admin123", saltRounds),
-    firstName: "John",
-    lastName: "Smith",
+    hashedPassword: adminPassword,
+    firstName: "System",
+    lastName: "Administrator",
     rank: "GEN",
     role: "Admin",
-    unit: "Command",
+    unit: "HQ",
     status: "active",
     joinDate: new Date().toISOString()
-  };
+  });
 
   // Create general (password: general123)
   const general: InsertUser = {
@@ -142,11 +145,10 @@ export async function seedDatabase() {
   ];
 
   // Create all users
-  await storage.createUser(admin);
   await storage.createUser(general);
   await storage.createUser(colonel);
   await storage.createUser(mp);
-  
+
   for (const soldier of soldiers) {
     await storage.createUser(soldier);
   }
@@ -168,9 +170,9 @@ export async function seedDatabase() {
 
   console.log("Database seeded successfully!");
   console.log("\nTest Users:");
-  console.log("  Admin:   Discord ID: 123456789 (John Smith)");
-  console.log("  General: Discord ID: 987654321 (Robert Jackson)");
-  console.log("  Colonel: Discord ID: 555666777 (Michael Davis)");
+  console.log("  Admin:   Discord ID: 000000000000000001 (System Administrator) - Password: admin123");
+  console.log("  General: Discord ID: 987654321 (Robert Jackson) - Password: general123");
+  console.log("  Colonel: Discord ID: 555666777 (Michael Davis) - Password: colonel123");
   console.log("  MP:      Discord ID: 111222333 (Sarah Johnson)");
   console.log("  Soldier: Discord ID: 444555666 (David Wilson)");
   console.log("\nUse these Discord IDs to log in!");
