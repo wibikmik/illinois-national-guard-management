@@ -89,6 +89,7 @@ export interface IStorage {
   getUserAwardsByUser(userId: string): Promise<UserAward[]>;
   getAllUserAwards(): Promise<UserAward[]>;
   createUserAward(userAward: InsertUserAward): Promise<UserAward>;
+  updateUserAward(id: string, updates: Partial<UserAward>): Promise<UserAward>;
   revokeUserAward(id: string): Promise<void>;
 }
 
@@ -432,6 +433,18 @@ export class JsonStorage implements IStorage {
     this.db.userAwards.push(userAward);
     await this.save();
     return userAward;
+  }
+
+  async updateUserAward(id: string, updates: Partial<UserAward>): Promise<UserAward> {
+    const index = this.db.userAwards.findIndex(ua => ua.id === id);
+    if (index === -1) throw new Error("User award not found");
+    
+    this.db.userAwards[index] = {
+      ...this.db.userAwards[index],
+      ...updates
+    };
+    await this.save();
+    return this.db.userAwards[index];
   }
 
   async revokeUserAward(id: string): Promise<void> {

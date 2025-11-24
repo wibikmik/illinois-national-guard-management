@@ -113,7 +113,8 @@ export async function startDiscordBot() {
 
     // Error handling
     client.on(Events.Error, (error) => {
-      console.error("Discord client error:", error);
+      console.error("Discord client error occurred");
+      // Don't log full error details to avoid token leaks
     });
 
     // Login to Discord
@@ -121,9 +122,10 @@ export async function startDiscordBot() {
     discordClient = client;
 
     return client;
-  } catch (error) {
-    console.error("Failed to start Discord bot:", error);
-    throw error;
+  } catch (error: any) {
+    // Don't log error details to avoid exposing token
+    console.error("Failed to start Discord bot - check token configuration");
+    throw new Error("Discord bot initialization failed");
   }
 }
 

@@ -120,8 +120,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const { startDiscordBot } = await import("./discord/index");
       await startDiscordBot();
       console.log("✅ Discord bot started successfully");
-    } catch (error) {
-      console.error("❌ Failed to start Discord bot:", error);
+    } catch (error: any) {
+      // Don't log the full error as it may contain sensitive data
+      console.error("❌ Failed to start Discord bot");
       console.error("Bot will not be available. Check DISCORD_BOT_TOKEN configuration.");
     }
   } else {

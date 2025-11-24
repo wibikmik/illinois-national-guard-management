@@ -259,6 +259,12 @@
       "action": "failed_login_attempt",
       "timestamp": "2025-11-24T15:45:01.530Z",
       "id": "c007759c-e392-4ca3-829d-ed74d4a0794e"
+    },
+    {
+      "performedBy": "f2bcbd2e-ed83-4d0d-b368-b9b2af3781e0",
+      "action": "failed_login_attempt",
+      "timestamp": "2025-11-24T15:46:35.009Z",
+      "id": "be0f322b-0523-4df3-9b4e-a8b99ebd26e3"
     }
   ]
 }
