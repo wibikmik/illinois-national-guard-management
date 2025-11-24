@@ -18,20 +18,6 @@ import { fromZodError } from "zod-validation-error";
 import bcrypt from "bcryptjs";
 
 // ============================================================================
-// SESSION MANAGEMENT
-// ============================================================================
-
-// Store active sessions: deviceId -> userId
-const activeSessions = new Map<string, string>();
-
-function getDeviceId(req: Request): string {
-  // Use a combination of IP and User-Agent as device identifier
-  const ip = req.ip || req.connection.remoteAddress || "unknown";
-  const userAgent = req.headers["user-agent"] || "unknown";
-  return `${ip}:${userAgent}`;
-}
-
-// ============================================================================
 // MIDDLEWARE
 // ============================================================================
 
@@ -54,14 +40,6 @@ async function requireAuth(req: Request, res: Response, next: NextFunction) {
   const user = await storage.getUser(userId);
   if (!user) {
     return res.status(401).json({ error: "Invalid user" });
-  }
-
-  // Verify that this device has an active session for this user
-  const deviceId = getDeviceId(req);
-  const sessionUserId = activeSessions.get(deviceId);
-  
-  if (sessionUserId !== userId) {
-    return res.status(401).json({ error: "Session expired or invalid. Please log in again." });
   }
 
   req.user = user;
@@ -122,26 +100,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // AUTH ROUTES
   // ============================================================================
 
-  app.post("/api/auth/logout", async (req: Request, res: Response) => {
-    try {
-      const userId = req.headers["x-user-id"] as string;
-      
-      if (userId) {
-        const deviceId = getDeviceId(req);
-        
-        // Remove session for this device
-        if (activeSessions.get(deviceId) === userId) {
-          activeSessions.delete(deviceId);
-          await createAudit(userId, "user_logout", undefined, undefined, undefined, deviceId);
-        }
-      }
-
-      return res.json({ success: true });
-    } catch (error: any) {
-      return res.status(500).json({ error: error.message });
-    }
-  });
-
   app.post("/api/auth/login", async (req: Request, res: Response) => {
     try {
       const { username, password } = req.body;
@@ -170,26 +128,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(401).json({ error: "Invalid credentials" });
       }
 
-      // Check if this device already has an active session with a different user
-      const deviceId = getDeviceId(req);
-      const existingSessionUserId = activeSessions.get(deviceId);
-      
-      if (existingSessionUserId && existingSessionUserId !== user.id) {
-        await createAudit(user.id, "login_blocked_device_already_in_use");
-        return res.status(403).json({ 
-          error: "This device already has an active session with another account. Please log out first." 
-        });
-      }
-
-      // Create session for this device
-      activeSessions.set(deviceId, user.id);
-
       // Update last activity
       await storage.updateUser(user.id, {
         lastActivity: new Date().toISOString()
       });
 
-      await createAudit(user.id, "user_login", undefined, undefined, undefined, deviceId);
+      await createAudit(user.id, "user_login");
 
       // Don't send password hash to client
       const { hashedPassword, ...userWithoutPassword } = user;
