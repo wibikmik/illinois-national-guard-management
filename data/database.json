@@ -7,7 +7,7 @@
       "hashedPassword": "$2b$12$mIuG6V0.vd.5c.setw3SVu29MC4By8BS7ymX2WDSPgQFhS/SIl.Ua",
       "firstName": "System",
       "lastName": "Administrator",
-      "rank": "GEN",
+      "rank": "GA",
       "role": "Admin",
       "unit": "HQ",
       "status": "active",
@@ -15,8 +15,8 @@
       "id": "f2bcbd2e-ed83-4d0d-b368-b9b2af3781e0",
       "meritPoints": 0,
       "createdAt": "2025-11-24T14:35:54.326Z",
-      "updatedAt": "2025-11-24T14:36:24.136Z",
-      "lastActivity": "2025-11-24T14:36:24.136Z"
+      "updatedAt": "2025-11-24T15:54:40.945Z",
+      "lastActivity": "2025-11-24T15:49:58.697Z"
     },
     {
       "discordId": "987654321",
@@ -265,6 +265,22 @@
       "action": "failed_login_attempt",
       "timestamp": "2025-11-24T15:46:35.009Z",
       "id": "be0f322b-0523-4df3-9b4e-a8b99ebd26e3"
+    },
+    {
+      "performedBy": "f2bcbd2e-ed83-4d0d-b368-b9b2af3781e0",
+      "action": "user_login",
+      "timestamp": "2025-11-24T15:49:58.699Z",
+      "id": "883999ea-2063-4760-996f-8a6bf6393fd3"
+    },
+    {
+      "performedBy": "f2bcbd2e-ed83-4d0d-b368-b9b2af3781e0",
+      "action": "user_updated",
+      "targetResourceType": "user",
+      "targetResourceId": "f2bcbd2e-ed83-4d0d-b368-b9b2af3781e0",
+      "previousValue": "{\"discordId\":\"000000000000000001\",\"discordUsername\":\"admin\",\"username\":\"admin\",\"hashedPassword\":\"$2b$12$mIuG6V0.vd.5c.setw3SVu29MC4By8BS7ymX2WDSPgQFhS/SIl.Ua\",\"firstName\":\"System\",\"lastName\":\"Administrator\",\"rank\":\"GEN\",\"role\":\"Admin\",\"unit\":\"HQ\",\"status\":\"active\",\"joinDate\":\"2025-11-24T14:35:54.325Z\",\"id\":\"f2bcbd2e-ed83-4d0d-b368-b9b2af3781e0\",\"meritPoints\":0,\"createdAt\":\"2025-11-24T14:35:54.326Z\",\"updatedAt\":\"2025-11-24T15:49:58.698Z\",\"lastActivity\":\"2025-11-24T15:49:58.697Z\"}",
+      "newValue": "{\"discordId\":\"000000000000000001\",\"discordUsername\":\"admin\",\"username\":\"admin\",\"hashedPassword\":\"$2b$12$mIuG6V0.vd.5c.setw3SVu29MC4By8BS7ymX2WDSPgQFhS/SIl.Ua\",\"firstName\":\"System\",\"lastName\":\"Administrator\",\"rank\":\"GA\",\"role\":\"Admin\",\"unit\":\"HQ\",\"status\":\"active\",\"joinDate\":\"2025-11-24T14:35:54.325Z\",\"id\":\"f2bcbd2e-ed83-4d0d-b368-b9b2af3781e0\",\"meritPoints\":0,\"createdAt\":\"2025-11-24T14:35:54.326Z\",\"updatedAt\":\"2025-11-24T15:49:58.698Z\",\"lastActivity\":\"2025-11-24T15:49:58.697Z\"}",
+      "timestamp": "2025-11-24T15:54:40.946Z",
+      "id": "bfc980a7-7797-4c3e-a11e-ef441b3d1abc"
     }
   ]
 }
