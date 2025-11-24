@@ -151,7 +151,16 @@
       "hashedPassword": "$2b$12$KxJ95W73asy7vJKjvVzz5eEWKztAquIDt3NNYZv0QgwPsg/XxozFe"
     }
   ],
-  "dutyLogs": [],
+  "dutyLogs": [
+    {
+      "userId": "f2bcbd2e-ed83-4d0d-b368-b9b2af3781e0",
+      "startTime": "2025-11-24T17:58:51.798Z",
+      "id": "0835ab2a-3745-4a10-a5cc-f094fffd0ec2",
+      "createdAt": "2025-11-24T17:58:51.798Z",
+      "endTime": "2025-11-24T17:58:54.762Z",
+      "duration": 0
+    }
+  ],
   "disciplinaryRecords": [],
   "promotions": [
     {
@@ -281,6 +290,23 @@
       "newValue": "{\"discordId\":\"000000000000000001\",\"discordUsername\":\"admin\",\"username\":\"admin\",\"hashedPassword\":\"$2b$12$mIuG6V0.vd.5c.setw3SVu29MC4By8BS7ymX2WDSPgQFhS/SIl.Ua\",\"firstName\":\"System\",\"lastName\":\"Administrator\",\"rank\":\"GA\",\"role\":\"Admin\",\"unit\":\"HQ\",\"status\":\"active\",\"joinDate\":\"2025-11-24T14:35:54.325Z\",\"id\":\"f2bcbd2e-ed83-4d0d-b368-b9b2af3781e0\",\"meritPoints\":0,\"createdAt\":\"2025-11-24T14:35:54.326Z\",\"updatedAt\":\"2025-11-24T15:49:58.698Z\",\"lastActivity\":\"2025-11-24T15:49:58.697Z\"}",
       "timestamp": "2025-11-24T15:54:40.946Z",
       "id": "bfc980a7-7797-4c3e-a11e-ef441b3d1abc"
+    },
+    {
+      "performedBy": "f2bcbd2e-ed83-4d0d-b368-b9b2af3781e0",
+      "action": "duty_started",
+      "targetResourceType": "duty_log",
+      "targetResourceId": "0835ab2a-3745-4a10-a5cc-f094fffd0ec2",
+      "timestamp": "2025-11-24T17:58:51.800Z",
+      "id": "8499ef04-4cec-4e69-a293-fbe23c9fc49e"
+    },
+    {
+      "performedBy": "f2bcbd2e-ed83-4d0d-b368-b9b2af3781e0",
+      "action": "duty_ended",
+      "targetResourceType": "duty_log",
+      "targetResourceId": "0835ab2a-3745-4a10-a5cc-f094fffd0ec2",
+      "newValue": "0 minutes",
+      "timestamp": "2025-11-24T17:58:54.763Z",
+      "id": "9e86c675-9058-4d24-b96f-91890679a7fc"
     }
   ]
 }
