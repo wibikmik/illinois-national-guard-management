@@ -168,7 +168,10 @@ export default function Promotions() {
                       </SelectTrigger>
                       <SelectContent>
                         {ALL_RANKS
-                          .filter(r => canPromoteTo(selectedPerson.rank, r.code))
+                          .filter(r => {
+                            const currentLevel = ALL_RANKS.find(rank => rank.code === selectedPerson.rank)?.level || 0;
+                            return r.level > currentLevel;
+                          })
                           .map(r => (
                             <SelectItem key={r.code} value={r.code}>
                               {r.code} - {r.name}

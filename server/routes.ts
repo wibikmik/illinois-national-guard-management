@@ -438,7 +438,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(404).json({ error: "User not found" });
       }
 
-      // Validate rank progression
+      // Validate rank exists
       const currentRankInfo = ALL_RANKS.find(r => r.code === user.rank);
       const targetRankInfo = ALL_RANKS.find(r => r.code === toRank);
       
@@ -446,8 +446,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ error: "Invalid rank" });
       }
 
-      if (targetRankInfo.level !== currentRankInfo.level + 1) {
-        return res.status(400).json({ error: "Can only promote to next rank level" });
+      // Prevent "promoting" to a lower rank (use demotion for that)
+      if (targetRankInfo.level <= currentRankInfo.level) {
+        return res.status(400).json({ error: "Cannot promote to same or lower rank" });
       }
 
       // Create promotion record
