@@ -12,8 +12,8 @@
       "id": "3c444c10-3801-44c3-81b0-fcb54851e55a",
       "meritPoints": 0,
       "createdAt": "2025-11-24T13:13:10.447Z",
-      "updatedAt": "2025-11-24T13:13:24.965Z",
-      "lastActivity": "2025-11-24T13:13:24.965Z"
+      "updatedAt": "2025-11-24T14:20:51.101Z",
+      "lastActivity": "2025-11-24T14:20:51.101Z"
     },
     {
       "discordId": "987654321",
@@ -28,7 +28,8 @@
       "id": "8e73a5df-070b-4f15-9605-0ec4bf61b69e",
       "meritPoints": 0,
       "createdAt": "2025-11-24T13:13:10.448Z",
-      "updatedAt": "2025-11-24T13:13:10.448Z"
+      "updatedAt": "2025-11-24T14:23:41.331Z",
+      "lastActivity": "2025-11-24T14:23:41.331Z"
     },
     {
       "discordId": "555666777",
@@ -135,7 +136,16 @@
       "updatedAt": "2025-11-24T13:13:10.452Z"
     }
   ],
-  "dutyLogs": [],
+  "dutyLogs": [
+    {
+      "userId": "3c444c10-3801-44c3-81b0-fcb54851e55a",
+      "startTime": "2025-11-24T14:20:57.394Z",
+      "id": "71303ce2-263c-4b45-895b-8c55a88714ef",
+      "createdAt": "2025-11-24T14:20:57.394Z",
+      "endTime": "2025-11-24T14:21:00.132Z",
+      "duration": 0
+    }
+  ],
   "disciplinaryRecords": [],
   "promotions": [],
   "meritPointTransactions": [],
@@ -162,6 +172,41 @@
       "action": "user_login",
       "timestamp": "2025-11-24T13:13:24.966Z",
       "id": "2c4c0d61-ab0d-4020-bf6d-ebaaeb4bdd01"
+    },
+    {
+      "performedBy": "3c444c10-3801-44c3-81b0-fcb54851e55a",
+      "action": "user_login",
+      "timestamp": "2025-11-24T14:20:51.103Z",
+      "id": "ac0d724c-7aa7-4df0-b83b-420be36f9c27"
+    },
+    {
+      "performedBy": "3c444c10-3801-44c3-81b0-fcb54851e55a",
+      "action": "duty_started",
+      "targetResourceType": "duty_log",
+      "targetResourceId": "71303ce2-263c-4b45-895b-8c55a88714ef",
+      "timestamp": "2025-11-24T14:20:57.395Z",
+      "id": "e1682e43-317f-4a85-870c-e3dd010332ff"
+    },
+    {
+      "performedBy": "3c444c10-3801-44c3-81b0-fcb54851e55a",
+      "action": "duty_ended",
+      "targetResourceType": "duty_log",
+      "targetResourceId": "71303ce2-263c-4b45-895b-8c55a88714ef",
+      "newValue": "0 minutes",
+      "timestamp": "2025-11-24T14:21:00.132Z",
+      "id": "cafa65da-48d2-4b85-a2c1-bb675a0ceca6"
+    },
+    {
+      "performedBy": "8e73a5df-070b-4f15-9605-0ec4bf61b69e",
+      "action": "user_login",
+      "timestamp": "2025-11-24T14:21:58.631Z",
+      "id": "5cb96d46-8005-470a-9b3b-b42c7c31c2c8"
+    },
+    {
+      "performedBy": "8e73a5df-070b-4f15-9605-0ec4bf61b69e",
+      "action": "user_login",
+      "timestamp": "2025-11-24T14:23:41.335Z",
+      "id": "71d5e47d-111d-4752-9efd-4bde7a15cc99"
     }
   ]
 }
