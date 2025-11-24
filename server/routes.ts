@@ -114,6 +114,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Seed database with test data
   await seedDatabase();
 
+  // Start Discord bot (if token is configured)
+  if (process.env.DISCORD_BOT_TOKEN) {
+    try {
+      const { startDiscordBot } = await import("./discord/index");
+      await startDiscordBot();
+      console.log("✅ Discord bot started successfully");
+    } catch (error) {
+      console.error("❌ Failed to start Discord bot:", error);
+      console.error("Bot will not be available. Check DISCORD_BOT_TOKEN configuration.");
+    }
+  } else {
+    console.log("⚠️  DISCORD_BOT_TOKEN not configured - Discord bot will not start");
+  }
+
   // ============================================================================
   // AUTH ROUTES
   // ============================================================================
