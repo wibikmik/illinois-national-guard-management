@@ -25,16 +25,16 @@
       "hashedPassword": "$2b$12$n3x7h7ix70nphS8bErFQZubt9IroJ5CFUxyjntAWGYVN8dIs7KEBC",
       "firstName": "Robert",
       "lastName": "Jackson",
-      "rank": "COL",
+      "rank": "GEN",
       "role": "General",
       "unit": "1st Division",
       "status": "active",
       "callsign": "Havoc-1",
       "joinDate": "2024-11-24T14:35:54.717Z",
       "id": "a21be4fb-918a-4389-8119-0f34816526d0",
-      "meritPoints": 0,
+      "meritPoints": 50,
       "createdAt": "2025-11-24T14:35:55.075Z",
-      "updatedAt": "2025-11-24T14:35:55.075Z"
+      "updatedAt": "2025-11-24T14:48:17.129Z"
     },
     {
       "discordId": "555666777",
@@ -147,13 +147,35 @@
       "id": "3ca8394e-1cd1-4484-9fd7-9b975dc44f25",
       "meritPoints": 0,
       "createdAt": "2025-11-24T14:35:55.089Z",
-      "updatedAt": "2025-11-24T14:35:55.089Z"
+      "updatedAt": "2025-11-24T14:49:17.586Z",
+      "hashedPassword": "$2b$12$KxJ95W73asy7vJKjvVzz5eEWKztAquIDt3NNYZv0QgwPsg/XxozFe"
     }
   ],
   "dutyLogs": [],
   "disciplinaryRecords": [],
-  "promotions": [],
-  "meritPointTransactions": [],
+  "promotions": [
+    {
+      "userId": "a21be4fb-918a-4389-8119-0f34816526d0",
+      "fromRank": "COL",
+      "toRank": "GEN",
+      "approvedBy": "f2bcbd2e-ed83-4d0d-b368-b9b2af3781e0",
+      "date": "2025-11-24T14:48:17.127Z",
+      "id": "5ce00aa1-cc91-48d8-8910-c6df4e003793",
+      "version": 1,
+      "createdAt": "2025-11-24T14:48:17.128Z"
+    }
+  ],
+  "meritPointTransactions": [
+    {
+      "userId": "a21be4fb-918a-4389-8119-0f34816526d0",
+      "amount": 50,
+      "reason": "Test",
+      "awardedBy": "f2bcbd2e-ed83-4d0d-b368-b9b2af3781e0",
+      "date": "2025-11-24T14:47:58.359Z",
+      "id": "4e4d0599-31b2-4b2f-a736-307b33939894",
+      "createdAt": "2025-11-24T14:47:58.360Z"
+    }
+  ],
   "missions": [],
   "units": [
     {
@@ -179,6 +201,40 @@
       "action": "user_login",
       "timestamp": "2025-11-24T14:36:24.137Z",
       "id": "1b3ac39c-376c-45bc-a637-88a62e4a51a5"
+    },
+    {
+      "performedBy": "f2bcbd2e-ed83-4d0d-b368-b9b2af3781e0",
+      "action": "merit_points_awarded",
+      "targetResourceType": "merit_transaction",
+      "targetResourceId": "4e4d0599-31b2-4b2f-a736-307b33939894",
+      "previousValue": "0",
+      "newValue": "50",
+      "timestamp": "2025-11-24T14:47:58.367Z",
+      "id": "62354650-c410-49bc-9fbe-19b9cb8a9f6e"
+    },
+    {
+      "performedBy": "f2bcbd2e-ed83-4d0d-b368-b9b2af3781e0",
+      "action": "promotion_approved",
+      "targetResourceType": "promotion",
+      "targetResourceId": "5ce00aa1-cc91-48d8-8910-c6df4e003793",
+      "previousValue": "COL",
+      "newValue": "GEN",
+      "timestamp": "2025-11-24T14:48:17.136Z",
+      "id": "15371ee0-c660-4d71-8e0b-f204a3319b88"
+    },
+    {
+      "performedBy": "f2bcbd2e-ed83-4d0d-b368-b9b2af3781e0",
+      "action": "password_reset",
+      "targetResourceType": "user",
+      "targetResourceId": "3ca8394e-1cd1-4484-9fd7-9b975dc44f25",
+      "timestamp": "2025-11-24T14:49:17.597Z",
+      "id": "8082e923-0f3c-4cbf-b758-ce338fb1494e"
+    },
+    {
+      "performedBy": "f2bcbd2e-ed83-4d0d-b368-b9b2af3781e0",
+      "action": "failed_login_attempt",
+      "timestamp": "2025-11-24T15:24:58.835Z",
+      "id": "b398098b-bc11-4f96-8b86-de70b392e797"
     }
   ]
 }
