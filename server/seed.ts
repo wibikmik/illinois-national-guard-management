@@ -1,5 +1,5 @@
 import { storage } from "./storage";
-import type { InsertUser } from "@shared/schema";
+import type { InsertUser, InsertAward } from "@shared/schema";
 import bcrypt from "bcryptjs";
 
 export async function seedDatabase() {
@@ -167,6 +167,82 @@ export async function seedDatabase() {
     description: "Infantry battalion",
     commanderId: (await storage.getUserByDiscordId("555666777"))!.id
   });
+
+  // Create Awards (US Army decorations)
+  const awards: InsertAward[] = [
+    // Valor decorations
+    { name: "Medal of Honor", abbreviation: "MOH", category: "valor", precedence: 1, description: "Najwyższe odznaczenie wojskowe USA za waleczność w walce" },
+    { name: "Distinguished Service Cross", abbreviation: "DSC", category: "valor", precedence: 2, description: "Drugie najwyższe odznaczenie za niezwykłą odwagę w walce" },
+    { name: "Silver Star", abbreviation: "SS", category: "valor", precedence: 3, description: "Odznaczenie za waleczność w działaniach bojowych" },
+    { name: "Bronze Star Medal", abbreviation: "BSM", category: "valor", precedence: 4, description: "Odznaczenie za heroizm lub zasługi w strefie działań bojowych" },
+    { name: "Purple Heart", abbreviation: "PH", category: "valor", precedence: 5, description: "Odznaczenie za rany odniesione w walce" },
+    
+    // Achievement decorations
+    { name: "Distinguished Service Medal", abbreviation: "DSM", category: "achievement", precedence: 10, description: "Za wyjątkowe zasługi dla rządu USA" },
+    { name: "Legion of Merit", abbreviation: "LOM", category: "achievement", precedence: 11, description: "Za wyjątkowo zasłużoną służbę" },
+    { name: "Meritorious Service Medal", abbreviation: "MSM", category: "achievement", precedence: 12, description: "Za zasługującą na wyróżnienie służbę" },
+    { name: "Army Commendation Medal", abbreviation: "ARCOM", category: "achievement", precedence: 13, description: "Za wyróżniającą się służbę lub osiągnięcia" },
+    { name: "Army Achievement Medal", abbreviation: "AAM", category: "achievement", precedence: 14, description: "Za wybitne osiągnięcia lub służbę" },
+    
+    // Service medals
+    { name: "Army Good Conduct Medal", abbreviation: "AGCM", category: "service", precedence: 20, description: "Za wzorowe zachowanie, wydajność i wierność" },
+    { name: "National Defense Service Medal", abbreviation: "NDSM", category: "service", precedence: 21, description: "Za służbę w okresie wojny" },
+    { name: "Afghanistan Campaign Medal", abbreviation: "ACM", category: "campaign", precedence: 30, description: "Za służbę w Afganistanie" },
+    { name: "Iraq Campaign Medal", abbreviation: "ICM", category: "campaign", precedence: 31, description: "Za służbę w Iraku" },
+    
+    // Skill badges
+    { name: "Combat Infantryman Badge", abbreviation: "CIB", category: "skill_badge", precedence: 40, description: "Dla piechoty biorącej udział w walce" },
+    { name: "Combat Action Badge", abbreviation: "CAB", category: "skill_badge", precedence: 41, description: "Za bezpośredni udział w walce" },
+    { name: "Expert Infantryman Badge", abbreviation: "EIB", category: "skill_badge", precedence: 42, description: "Za umiejętności piechoty" },
+    { name: "Parachutist Badge", abbreviation: "Airborne", category: "skill_badge", precedence: 43, description: "Za ukończenie szkolenia spadochronowego" },
+    { name: "Air Assault Badge", abbreviation: "Air Assault", category: "skill_badge", precedence: 44, description: "Za ukończenie szkolenia Air Assault" },
+    { name: "Ranger Tab", abbreviation: "Ranger", category: "skill_badge", precedence: 45, description: "Za ukończenie szkoły Ranger" }
+  ];
+
+  for (const award of awards) {
+    await storage.createAward(award);
+  }
+
+  // Award some decorations to users
+  const generalUser = await storage.getUserByDiscordId("987654321");
+  const colonelUser = await storage.getUserByDiscordId("555666777");
+  
+  if (generalUser) {
+    const allAwards = await storage.getAllAwards();
+    const bronzeStar = allAwards.find(a => a.abbreviation === "BSM");
+    const msmAward = allAwards.find(a => a.abbreviation === "MSM");
+    const cabAward = allAwards.find(a => a.abbreviation === "CAB");
+    
+    if (bronzeStar) {
+      await storage.createUserAward({
+        userId: generalUser.id,
+        awardId: bronzeStar.id,
+        dateAwarded: new Date(Date.now() - 200 * 24 * 60 * 60 * 1000).toISOString(),
+        awardedBy: admin.id,
+        vDevice: true,
+        citation: "Za heroizm podczas operacji bojowej"
+      });
+    }
+    
+    if (msmAward) {
+      await storage.createUserAward({
+        userId: generalUser.id,
+        awardId: msmAward.id,
+        dateAwarded: new Date(Date.now() - 150 * 24 * 60 * 60 * 1000).toISOString(),
+        awardedBy: admin.id,
+        oakLeafClusters: 2
+      });
+    }
+
+    if (cabAward) {
+      await storage.createUserAward({
+        userId: generalUser.id,
+        awardId: cabAward.id,
+        dateAwarded: new Date(Date.now() - 180 * 24 * 60 * 60 * 1000).toISOString(),
+        awardedBy: admin.id
+      });
+    }
+  }
 
   console.log("Database seeded successfully!");
   console.log("\nTest Users:");

@@ -822,6 +822,113 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // ============================================================================
+  // AWARDS ROUTES
+  // ============================================================================
+
+  // Get all awards (catalog)
+  app.get("/api/awards", requireAuth, async (req: Request, res: Response) => {
+    try {
+      const awards = await storage.getAllAwards();
+      return res.json(awards);
+    } catch (error: any) {
+      return res.status(500).json({ error: error.message });
+    }
+  });
+
+  // Get user's awards
+  app.get("/api/users/:userId/awards", requireAuth, async (req: Request, res: Response) => {
+    try {
+      const { userId } = req.params;
+      const userAwards = await storage.getUserAwardsByUser(userId);
+      
+      // Enrich with award details
+      const awards = await storage.getAllAwards();
+      const awardsMap = new Map(awards.map(a => [a.id, a]));
+      
+      const enrichedAwards = userAwards.map(ua => ({
+        ...ua,
+        award: awardsMap.get(ua.awardId)
+      }));
+
+      return res.json(enrichedAwards);
+    } catch (error: any) {
+      return res.status(500).json({ error: error.message });
+    }
+  });
+
+  // Award a decoration to a user (Admin/General only)
+  app.post("/api/users/:userId/awards", requireAuth, requirePermission("manage_merit_points"), async (req: Request, res: Response) => {
+    try {
+      const { userId } = req.params;
+      const validation = z.object({
+        awardId: z.string(),
+        dateAwarded: z.string().optional(),
+        oakLeafClusters: z.number().default(0),
+        vDevice: z.boolean().default(false),
+        cDevice: z.boolean().default(false),
+        citation: z.string().optional()
+      }).safeParse(req.body);
+
+      if (!validation.success) {
+        const error = fromZodError(validation.error);
+        return res.status(400).json({ error: error.message });
+      }
+
+      const data = validation.data;
+      const userAward = await storage.createUserAward({
+        userId,
+        awardId: data.awardId,
+        dateAwarded: data.dateAwarded || new Date().toISOString(),
+        awardedBy: req.user!.id,
+        oakLeafClusters: data.oakLeafClusters,
+        vDevice: data.vDevice,
+        cDevice: data.cDevice,
+        citation: data.citation
+      });
+
+      await createAudit(
+        req.user!.id,
+        "award_granted",
+        "user_award",
+        userAward.id,
+        undefined,
+        JSON.stringify({ userId, awardId: data.awardId })
+      );
+
+      return res.status(201).json(userAward);
+    } catch (error: any) {
+      return res.status(500).json({ error: error.message });
+    }
+  });
+
+  // Revoke an award (Admin only)
+  app.delete("/api/user-awards/:userAwardId", requireAuth, requirePermission("manage_merit_points"), async (req: Request, res: Response) => {
+    try {
+      const { userAwardId } = req.params;
+      
+      const userAward = await storage.getUserAward(userAwardId);
+      if (!userAward) {
+        return res.status(404).json({ error: "User award not found" });
+      }
+
+      await storage.revokeUserAward(userAwardId);
+
+      await createAudit(
+        req.user!.id,
+        "award_revoked",
+        "user_award",
+        userAwardId,
+        JSON.stringify(userAward),
+        undefined
+      );
+
+      return res.json({ success: true, message: "Award revoked successfully" });
+    } catch (error: any) {
+      return res.status(500).json({ error: error.message });
+    }
+  });
+
+  // ============================================================================
   // DASHBOARD ROUTES
   // ============================================================================
 
