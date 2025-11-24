@@ -16,6 +16,8 @@ import {
 } from "@shared/schema";
 import { fromZodError } from "zod-validation-error";
 import bcrypt from "bcryptjs";
+import rateLimit from "express-rate-limit";
+import { z } from "zod";
 
 // ============================================================================
 // MIDDLEWARE
@@ -28,6 +30,22 @@ declare global {
     }
   }
 }
+
+// Rate limiter for login endpoint
+const loginLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 5, // 5 attempts per 15 minutes
+  message: { error: "Zbyt wiele prób logowania. Spróbuj ponownie za 15 minut." },
+  standardHeaders: true,
+  legacyHeaders: false,
+  skipSuccessfulRequests: true, // Don't count successful logins
+});
+
+// Login body validation schema
+const loginBodySchema = z.object({
+  username: z.string().min(1, "Nazwa użytkownika jest wymagana").trim(),
+  password: z.string().min(1, "Hasło jest wymagane")
+});
 
 // Simple auth middleware - checks if user exists in session/storage
 async function requireAuth(req: Request, res: Response, next: NextFunction) {
@@ -131,32 +149,44 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post("/api/auth/login", async (req: Request, res: Response) => {
+  app.post("/api/auth/login", loginLimiter, async (req: Request, res: Response) => {
     try {
-      const { username, password } = req.body;
-      
-      if (!username || !password) {
-        return res.status(400).json({ error: "Username and password required" });
+      // Validate request body
+      const validation = loginBodySchema.safeParse(req.body);
+      if (!validation.success) {
+        const error = fromZodError(validation.error);
+        return res.status(400).json({ error: error.message });
       }
 
-      // Find user by username
+      const { username, password } = validation.data;
+
+      // Find user by username (case-insensitive)
       const allUsers = await storage.getAllUsers();
-      const user = allUsers.find(u => u.username === username);
+      const user = allUsers.find(u => u.username?.toLowerCase() === username.toLowerCase());
       
       if (!user) {
-        return res.status(401).json({ error: "Invalid credentials" });
+        await createAudit("system", "failed_login_attempt_unknown_user", "user", undefined, undefined, username);
+        return res.status(401).json({ error: "Nieprawidłowa nazwa użytkownika lub hasło" });
+      }
+
+      // Check if user has password set
+      if (!user.hashedPassword) {
+        await createAudit(user.id, "failed_login_attempt_no_password");
+        return res.status(401).json({ error: "Konto nie ma ustawionego hasła. Skontaktuj się z administratorem." });
+      }
+
+      // Check if user is active
+      if (user.status !== "active") {
+        await createAudit(user.id, "failed_login_attempt_inactive_user");
+        return res.status(403).json({ error: "Konto jest nieaktywne. Skontaktuj się z administratorem." });
       }
 
       // Verify password
-      if (!user.hashedPassword) {
-        return res.status(401).json({ error: "Password not set for this user" });
-      }
-
       const isValidPassword = await bcrypt.compare(password, user.hashedPassword);
       
       if (!isValidPassword) {
         await createAudit(user.id, "failed_login_attempt");
-        return res.status(401).json({ error: "Invalid credentials" });
+        return res.status(401).json({ error: "Nieprawidłowa nazwa użytkownika lub hasło" });
       }
 
       // Update last activity
@@ -170,7 +200,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const { hashedPassword, ...userWithoutPassword } = user;
       return res.json(userWithoutPassword);
     } catch (error: any) {
-      return res.status(500).json({ error: error.message });
+      console.error("Login error:", error);
+      return res.status(500).json({ error: "Wystąpił błąd podczas logowania. Spróbuj ponownie później." });
     }
   });
 
