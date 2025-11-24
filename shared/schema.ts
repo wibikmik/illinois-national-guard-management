@@ -106,7 +106,16 @@ export const ROLE_PERMISSIONS = {
     "configure_bot",
     "view_audit_logs",
     "view_all_reports",
-    "view_all_disciplinary"
+    "view_all_disciplinary",
+    "promote",
+    "demote",
+    "manage_merit_points",
+    "create_disciplinary",
+    "update_disciplinary",
+    "revoke_disciplinary",
+    "override_disciplinary",
+    "reset_passwords",
+    "modify_all_users"
   ]
 } as const;
 

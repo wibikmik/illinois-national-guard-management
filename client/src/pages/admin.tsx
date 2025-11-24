@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
+import { Textarea } from "@/components/ui/textarea";
 import {
   Select,
   SelectContent,
@@ -51,6 +52,11 @@ export default function Admin() {
   const user = getAuthUser();
   const { toast } = useToast();
   const [open, setOpen] = useState(false);
+  const [passwordResetOpen, setPasswordResetOpen] = useState(false);
+  const [editUserOpen, setEditUserOpen] = useState(false);
+  const [selectedUserId, setSelectedUserId] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [editingUser, setEditingUser] = useState<User | null>(null);
 
   const form = useForm<CreateUserForm>({
     resolver: zodResolver(createUserSchema),
@@ -68,8 +74,8 @@ export default function Admin() {
     }
   });
 
-  const { data: units } = useQuery<Unit[]>({
-    queryKey: ["/api/units"],
+  const { data: units } = useQuery<User[]>({
+    queryKey: ["/api/users"],
     enabled: !!user && hasPermission(user, "manage_users")
   });
 
@@ -103,6 +109,55 @@ export default function Admin() {
       toast({
         title: "Error",
         description: "Failed to create user",
+        variant: "destructive"
+      });
+    }
+  };
+
+  const handlePasswordReset = async () => {
+    if (!selectedUserId || !newPassword) return;
+
+    try {
+      await apiRequest("POST", "/api/auth/reset-password", {
+        userId: selectedUserId,
+        newPassword
+      });
+
+      toast({
+        title: "Password reset",
+        description: "Password has been reset successfully"
+      });
+
+      setPasswordResetOpen(false);
+      setSelectedUserId("");
+      setNewPassword("");
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to reset password",
+        variant: "destructive"
+      });
+    }
+  };
+
+  const handleUserUpdate = async () => {
+    if (!editingUser) return;
+
+    try {
+      await apiRequest("PUT", `/api/users/${editingUser.id}`, editingUser);
+
+      toast({
+        title: "User updated",
+        description: "User information has been updated successfully"
+      });
+
+      setEditUserOpen(false);
+      setEditingUser(null);
+      queryClient.invalidateQueries({ queryKey: ["/api/users"] });
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to update user",
         variant: "destructive"
       });
     }
@@ -177,6 +232,12 @@ export default function Admin() {
         <TabsList>
           <TabsTrigger value="users" data-testid="tab-users">
             User Management
+          </TabsTrigger>
+          <TabsTrigger value="passwords" data-testid="tab-passwords">
+            Password Reset
+          </TabsTrigger>
+          <TabsTrigger value="edit" data-testid="tab-edit">
+            Edit Users
           </TabsTrigger>
           <TabsTrigger value="data" data-testid="tab-data">
             Data Management
@@ -344,6 +405,182 @@ export default function Admin() {
               <p className="text-sm text-muted-foreground">
                 Only administrators can create new user accounts. Each account requires a valid Discord ID for authentication.
               </p>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="passwords">
+          <Card>
+            <CardHeader>
+              <CardTitle>Reset User Password</CardTitle>
+              <CardDescription>Reset passwords for any user in the system</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="space-y-2">
+                <Label>Select User</Label>
+                <Select value={selectedUserId} onValueChange={setSelectedUserId}>
+                  <SelectTrigger data-testid="select-user-password">
+                    <SelectValue placeholder="Select user" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {units && units.map((u: any) => (
+                      <SelectItem key={u.id} value={u.id}>
+                        {u.firstName} {u.lastName} ({u.username})
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="newPassword">New Password</Label>
+                <Input
+                  id="newPassword"
+                  type="password"
+                  value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value)}
+                  placeholder="Enter new password"
+                  data-testid="input-new-password"
+                />
+              </div>
+              <Button
+                onClick={handlePasswordReset}
+                disabled={!selectedUserId || !newPassword}
+                data-testid="button-reset-password"
+              >
+                Reset Password
+              </Button>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="edit">
+          <Card>
+            <CardHeader>
+              <CardTitle>Edit User Information</CardTitle>
+              <CardDescription>Modify any user's information</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="space-y-2">
+                <Label>Select User to Edit</Label>
+                <Select
+                  value={editingUser?.id || ""}
+                  onValueChange={(id) => {
+                    const foundUser = units?.find((u: any) => u.id === id);
+                    if (foundUser) setEditingUser(foundUser);
+                  }}
+                >
+                  <SelectTrigger data-testid="select-user-edit">
+                    <SelectValue placeholder="Select user" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {units && units.map((u: any) => (
+                      <SelectItem key={u.id} value={u.id}>
+                        {u.firstName} {u.lastName} ({u.username})
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              {editingUser && (
+                <Dialog open={editUserOpen} onOpenChange={setEditUserOpen}>
+                  <DialogTrigger asChild>
+                    <Button data-testid="button-open-edit">Edit Selected User</Button>
+                  </DialogTrigger>
+                  <DialogContent className="max-w-2xl">
+                    <DialogHeader>
+                      <DialogTitle>Edit User: {editingUser.firstName} {editingUser.lastName}</DialogTitle>
+                      <DialogDescription>Update user information</DialogDescription>
+                    </DialogHeader>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <Label>First Name</Label>
+                        <Input
+                          value={editingUser.firstName}
+                          onChange={(e) => setEditingUser({ ...editingUser, firstName: e.target.value })}
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label>Last Name</Label>
+                        <Input
+                          value={editingUser.lastName}
+                          onChange={(e) => setEditingUser({ ...editingUser, lastName: e.target.value })}
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label>Rank</Label>
+                        <Select
+                          value={editingUser.rank}
+                          onValueChange={(val) => setEditingUser({ ...editingUser, rank: val as any })}
+                        >
+                          <SelectTrigger>
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {RANK_CODES.map(code => (
+                              <SelectItem key={code} value={code}>{code}</SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      <div className="space-y-2">
+                        <Label>Role</Label>
+                        <Select
+                          value={editingUser.role}
+                          onValueChange={(val) => setEditingUser({ ...editingUser, role: val as any })}
+                        >
+                          <SelectTrigger>
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {USER_ROLES.map(role => (
+                              <SelectItem key={role} value={role}>{role}</SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      <div className="space-y-2">
+                        <Label>Unit</Label>
+                        <Input
+                          value={editingUser.unit}
+                          onChange={(e) => setEditingUser({ ...editingUser, unit: e.target.value })}
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label>Merit Points</Label>
+                        <Input
+                          type="number"
+                          value={editingUser.meritPoints}
+                          onChange={(e) => setEditingUser({ ...editingUser, meritPoints: parseInt(e.target.value) || 0 })}
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label>Status</Label>
+                        <Select
+                          value={editingUser.status}
+                          onValueChange={(val) => setEditingUser({ ...editingUser, status: val as any })}
+                        >
+                          <SelectTrigger>
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="active">Active</SelectItem>
+                            <SelectItem value="inactive">Inactive</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    </div>
+                    <DialogFooter>
+                      <Button variant="secondary" onClick={() => setEditUserOpen(false)}>
+                        Cancel
+                      </Button>
+                      <Button onClick={handleUserUpdate} data-testid="button-save-user">
+                        Save Changes
+                      </Button>
+                    </DialogFooter>
+                  </DialogContent>
+                </Dialog>
+              )}
             </CardContent>
           </Card>
         </TabsContent>

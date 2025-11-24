@@ -100,6 +100,37 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // AUTH ROUTES
   // ============================================================================
 
+  app.post("/api/auth/reset-password", requireAuth, requirePermission("reset_passwords"), async (req: Request, res: Response) => {
+    try {
+      const { userId, newPassword } = req.body;
+      
+      if (!userId || !newPassword) {
+        return res.status(400).json({ error: "User ID and new password required" });
+      }
+
+      const user = await storage.getUser(userId);
+      if (!user) {
+        return res.status(404).json({ error: "User not found" });
+      }
+
+      const saltRounds = 12;
+      const hashedPassword = await bcrypt.hash(newPassword, saltRounds);
+
+      await storage.updateUser(userId, { hashedPassword });
+
+      await createAudit(
+        req.user!.id,
+        "password_reset",
+        "user",
+        userId
+      );
+
+      return res.json({ success: true, message: "Password reset successfully" });
+    } catch (error: any) {
+      return res.status(500).json({ error: error.message });
+    }
+  });
+
   app.post("/api/auth/login", async (req: Request, res: Response) => {
     try {
       const { username, password } = req.body;
@@ -151,6 +182,41 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const users = await storage.getAllUsers();
       return res.json(users);
+    } catch (error: any) {
+      return res.status(500).json({ error: error.message });
+    }
+  });
+
+  app.put("/api/users/:id", requireAuth, requirePermission("modify_all_users"), async (req: Request, res: Response) => {
+    try {
+      const { id } = req.params;
+      const { password, ...updates } = req.body;
+
+      const user = await storage.getUser(id);
+      if (!user) {
+        return res.status(404).json({ error: "User not found" });
+      }
+
+      // Hash password if provided
+      if (password) {
+        const saltRounds = 12;
+        updates.hashedPassword = await bcrypt.hash(password, saltRounds);
+      }
+
+      const updatedUser = await storage.updateUser(id, updates);
+
+      await createAudit(
+        req.user!.id,
+        "user_updated",
+        "user",
+        id,
+        JSON.stringify(user),
+        JSON.stringify(updates)
+      );
+
+      // Don't send password hash to client
+      const { hashedPassword: _, ...userWithoutPassword } = updatedUser;
+      return res.json(userWithoutPassword);
     } catch (error: any) {
       return res.status(500).json({ error: error.message });
     }
